@@ -1,0 +1,92 @@
+/* Reserve Form Styles (shared form styles) */
+.main {
+  width: 90%;
+  margin: 20px auto 0;
+  position: relative;
+  margin-top: 100px;
+  padding: 20px;
+  border: 4px solid #000000;
+  border-radius: 30px;
+}
+
+.form-bg {
+  background: #F2E9DC;
+  padding: 1% 15%;
+  border-radius: 18px;
+}
+
+header {
+  font-family: 'Courier New', monospace;
+  font-size: 30px;
+}
+
+.inputs-block {
+  width: 250px;
+  padding-left: 40px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.full-width-input {
+  width: 100%;
+  padding-left: 40px;
+  margin-bottom: 15px;
+}
+
+.full-width-input .label-name {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.full-width-input input,
+.full-width-input textarea,
+.full-width-input select {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid #6F4E37;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+}
+
+input:valid,
+textarea:valid,
+select:valid {
+  border: 2px solid green;
+  background: #f6fff6;
+}
+
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  border: 2px solid darkred;
+  box-shadow: 0 0 5px darkred;
+}
+
+.submit-btn {
+  background: #6F4E37;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 5px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+}
+
+.submit-btn:hover {
+  background: #5a3f2e;
+}
+
+@media (max-width: 768px) {
+  .main {
+    width: 95%;
+    margin-top: 120px;
+  }
+  
+  .form-bg {
+    padding: 1% 5%;
+  }
+} 
