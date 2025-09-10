@@ -9,7 +9,7 @@ const ITEMS = [
   { id: 'cappuccino', name: 'Cappuccino', description: 'Rich foam and balanced taste', price: 190 },
   { id: 'mocha', name: 'Mocha', description: 'Chocolate flavored coffee', price: 210 },
   { id: 'flatwhite', name: 'Flat White', description: 'Velvety microfoam and espresso', price: 200 },
-  { id: 'croissant', name: 'Croissant', description: 'Buttery flaky pastry', price: 90 },
+  { id: 'croissant', name: 'Prassant', description: 'Buttery flaky pastry', price: 90 },
   { id: 'muffin', name: 'Blueberry Muffin', description: 'Soft, sweet, and fruity', price: 80 },
 ];
 
@@ -18,18 +18,31 @@ function formatCurrency(value) {
 }
 
 const OrderDiscountPage = () => {
-  const [cart, setCart] = useState([]); // array of {id,name,price}
-  const [discountPercent, setDiscountPercent] = useState(0);
+  const [cart, setCart] = useState([]);
+  const [discountPercent, setDiscountPercent] = useState('');
 
-  const subtotal = useMemo(() => cart.reduce((sum, item) => sum + item.price, 0), [cart]);
-  const discountAmount = useMemo(
-    () => Math.min(Math.max(discountPercent, 0), 100) * subtotal / 100,
-    [discountPercent, subtotal]
+  const subtotal = useMemo(
+    () => cart.reduce((sum, item) => sum + item.price, 0),
+    [cart]
   );
-  const total = useMemo(() => Math.max(subtotal - discountAmount, 0), [subtotal, discountAmount]);
+
+  const discountAmount = useMemo(() => {
+  if (discountPercent === '') return 0;
+  const percent = Number(discountPercent);
+  return Math.min(Math.max(percent, 0), 100) * subtotal / 100;
+  }, [discountPercent, subtotal]);
+
+
+  const total = useMemo(
+    () => Math.max(subtotal - discountAmount, 0),
+    [subtotal, discountAmount]
+  );
 
   const handleAdd = (item) => {
-    setCart((prev) => [...prev, { id: `${item.id}-${prev.length + 1}` , name: item.name, price: item.price }]);
+    setCart((prev) => [
+      ...prev,
+      { id: `${item.id}-${prev.length + 1}`, name: item.name, price: item.price },
+    ]);
   };
 
   const handleRemove = (id) => {
@@ -41,10 +54,18 @@ const OrderDiscountPage = () => {
       alert('Please add at least one item to confirm your order.');
       return;
     }
-    const itemsSummary = cart.map(i => `${i.name} - ${formatCurrency(i.price)}`).join('\n');
-    alert(`Order Confirmed!\n\nItems:\n${itemsSummary}\n\nSubtotal: ${formatCurrency(subtotal)}\nDiscount (${Math.min(Math.max(discountPercent, 0), 100)}%): -${formatCurrency(discountAmount)}\nTotal: ${formatCurrency(total)}`);
+    const itemsSummary = cart
+      .map((i) => `${i.name} - ${formatCurrency(i.price)}`)
+      .join('\n');
+    alert(
+      `Order Confirmed!\n\nItems:\n${itemsSummary}\n\nSubtotal: ${formatCurrency(
+        subtotal
+      )}\nDiscount (${discountPercent || 0}%): -${formatCurrency(
+        discountAmount
+      )}\nTotal: ${formatCurrency(total)}`
+    );
     setCart([]);
-    setDiscountPercent(0);
+    setDiscountPercent('');
   };
 
   return (
@@ -67,7 +88,12 @@ const OrderDiscountPage = () => {
                   <div className="item-separator" />
                   <div className="item-actions">
                     <div className="item-desc">{item.description}</div>
-                    <button className="submit-btn add-btn" onClick={() => handleAdd(item)}>Add</button>
+                    <button
+                      className="submit-btn add-btn"
+                      onClick={() => handleAdd(item)}
+                    >
+                      Add
+                    </button>
                   </div>
                 </div>
               ))}
@@ -87,7 +113,12 @@ const OrderDiscountPage = () => {
                   <div className="bill-name">{entry.name}</div>
                   <div className="bill-right">
                     <div className="bill-price">{formatCurrency(entry.price)}</div>
-                    <button className="remove-btn" onClick={() => handleRemove(entry.id)}>×</button>
+                    <button
+                      className="remove-btn"
+                      onClick={() => handleRemove(entry.id)}
+                    >
+                      ×
+                    </button>
                   </div>
                 </div>
               ))}
@@ -99,10 +130,14 @@ const OrderDiscountPage = () => {
                 <input
                   className="discount-input"
                   type="number"
-                  min="0"
                   max="100"
+                  placeholder="0" // shows 0 until typing
                   value={discountPercent}
-                  onChange={(e) => setDiscountPercent(Number(e.target.value))}
+                  onChange={(e) => {
+                    // Remove leading zeros safely
+                    let val = e.target.value.replace(/^0+(?=\d)/, '');
+                    setDiscountPercent(val);
+                  }}
                 />
                 <span className="discount-suffix">%</span>
               </div>
@@ -110,17 +145,22 @@ const OrderDiscountPage = () => {
 
             <div className="total-row">
               <div className="total-left">
-                <div>Subtotal</div>
+                <div><h4>Total</h4></div>
                 <div className="muted">After discount</div>
               </div>
               <div className="total-right">
-                <div className="subtotal">{formatCurrency(subtotal)}</div>
                 <div className="grandtotal">{formatCurrency(total)}</div>
+                <div className="subtotal">{formatCurrency(subtotal)}</div>
               </div>
             </div>
 
             <div className="confirm-wrap">
-              <button className="submit-btn confirm-btn" onClick={handleConfirm}>Confirm Order</button>
+              <button
+                className="submit-btn confirm-btn"
+                onClick={handleConfirm}
+              >
+                Confirm Order
+              </button>
             </div>
           </section>
         </div>
