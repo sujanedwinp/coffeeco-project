@@ -30,6 +30,12 @@ const Navigation = ({ currentPage, onPageChange }) => {
         >
           Order
         </button>
+        <button 
+          className={`nav-button ${currentPage === 'order' ? 'current' : ''}`}
+          onClick={() => window.location.href='bcatt.vercel.app'}
+        >
+          Order
+        </button>
       </div>
     </nav>
   );

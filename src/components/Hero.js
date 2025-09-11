@@ -28,6 +28,12 @@ const Hero = ({ onPageChange }) => {
         >
           Order
         </button>
+        <button 
+          className="hero-button"
+          onClick={() => window.location.href='bcatt.vercel.app'}
+        >
+          View Projects
+        </button>
       </div>
     </div>
   );
