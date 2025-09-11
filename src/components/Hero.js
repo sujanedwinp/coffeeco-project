@@ -30,7 +30,7 @@ const Hero = ({ onPageChange }) => {
         </button>
         <button 
           className="hero-button"
-          onClick={() => window.location.href='bcatt.vercel.app'}
+          onClick={() => window.location.href='https://bcatt.vercel.app/page-navi.html'}
         >
           View Projects
         </button>

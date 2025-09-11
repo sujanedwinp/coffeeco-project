@@ -31,10 +31,10 @@ const Navigation = ({ currentPage, onPageChange }) => {
           Order
         </button>
         <button 
-          className={`nav-button ${currentPage === 'order' ? 'current' : ''}`}
-          onClick={() => window.location.href='bcatt.vercel.app'}
+          className={`nav-button ${currentPage === 'projects' ? 'current' : ''}`}
+          onClick={() => window.location.href='https://bcatt.vercel.app/page-navi.html'}
         >
-          Order
+          Projects
         </button>
       </div>
     </nav>
