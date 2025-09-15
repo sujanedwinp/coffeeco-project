@@ -22,7 +22,7 @@ const OrderDiscountPage = () => {
   const [discountPercent, setDiscountPercent] = useState('');
 
   const subtotal = useMemo(
-    () => cart.reduce((sum, item) => sum + item.price, 0),
+    () => cart.reduce((sum, item) => sum + (item.price*item.quantity), 0),
     [cart]
   );
 
@@ -39,14 +39,28 @@ const OrderDiscountPage = () => {
   );
 
   const handleAdd = (item) => {
-    setCart((prev) => [
-      ...prev,
-      { id: `${item.id}-${prev.length + 1}`, name: item.name, price: item.price },
-    ]);
+    setCart((prev) => {
+      const existing = prev.find((i) => i.id === item.id);
+      if (existing) {
+        return prev.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity * 2 } : i
+        );
+      }
+      return [...prev, { id: item.id, name: item.name, price: item.price, quantity: 1 }];
+    });
   };
 
   const handleRemove = (id) => {
-    setCart((prev) => prev.filter((i) => i.id !== id));
+    setCart((prev) => {
+      const existing = prev.find((i) => i.id === id);
+      if (!existing) return prev;
+      if (existing.quantity > 1) {
+        return prev.map((i) =>
+          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+        );
+      }
+      return prev.filter((i) => i.id !== id);
+    });
   };
 
   const handleConfirm = () => {
@@ -55,7 +69,7 @@ const OrderDiscountPage = () => {
       return;
     }
     const itemsSummary = cart
-      .map((i) => `${i.name} - ${formatCurrency(i.price)}`)
+      .map((i) => `${i.name} - ${formatCurrency(i.price * i.quantity)}`)
       .join('\n');
     alert(
       `Order Confirmed!\n\nItems:\n${itemsSummary}\n\nSubtotal: ${formatCurrency(
@@ -75,10 +89,10 @@ const OrderDiscountPage = () => {
           <h1>Order</h1>
         </header>
 
-        <div className="order-grid">
+        <div className="order-grid ">
           <section className="items-panel">
             <h2 className="panel-title horizon-align">Items</h2>
-            <div className="items-scroll scroll-hidden">
+            <div className="items-scroll scroll-hidden ">
               {ITEMS.map((item) => (
                 <div key={item.id} className="item-card">
                   <div className="item-row">
@@ -110,9 +124,9 @@ const OrderDiscountPage = () => {
               )}
               {cart.map((entry) => (
                 <div key={entry.id} className="bill-row">
-                  <div className="bill-name">{entry.name}</div>
+                  <div className="bill-name">{entry.name} x {entry.quantity}</div>
                   <div className="bill-right">
-                    <div className="bill-price">{formatCurrency(entry.price)}</div>
+                    <div className="bill-price">{formatCurrency(entry.price * entry.quantity)}</div>
                     <button
                       className="remove-btn"
                       onClick={() => handleRemove(entry.id)}
