@@ -28,7 +28,7 @@ const OrderDiscountPage = () => {
 
   const discountAmount = useMemo(() => {
   if (discountPercent === '') return 0;
-  const percent = Number(discountPercent);
+  const percent =  Number(discountPercent);
   return Math.min(Math.max(percent, 0), 100) * subtotal / 100;
   }, [discountPercent, subtotal]);
 
@@ -43,7 +43,7 @@ const OrderDiscountPage = () => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
         return prev.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity * 2 } : i
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
       return [...prev, { id: item.id, name: item.name, price: item.price, quantity: 1 }];
@@ -99,7 +99,7 @@ const OrderDiscountPage = () => {
                     <div className="item-name">{item.name}</div>
                     <div className="item-price">{formatCurrency(item.price)}</div>
                   </div>
-                  <div className="item-separator" />
+                  <div className="item-se parator" />
                   <div className="item-actions">
                     <div className="item-desc">{item.description}</div>
                     <button
@@ -145,10 +145,9 @@ const OrderDiscountPage = () => {
                   className="discount-input"
                   type="number"
                   max="100"
-                  placeholder="0" // shows 0 until typing
+                  placeholder="0"
                   value={discountPercent}
                   onChange={(e) => {
-                    // Remove leading zeros safely
                     let val = e.target.value.replace(/^0+(?=\d)/, '');
                     setDiscountPercent(val);
                   }}

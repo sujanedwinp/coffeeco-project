@@ -58,14 +58,8 @@
   flex-direction: column;
   justify-content: space-between;
   height: fit-content;
-  transition: transform 0.2s ease-in-out; /* smooth animation */
+  transition: all 0.2s ease-in-out;
 }
-
-.item-card:hover {
-  transform: scale(1.05);
-  z-index: 2;
-}
-
 .item-row { display: flex; justify-content: space-between; align-items: center; }
 .item-name { font-weight: 700; font-size: 18px; }
 .item-price { font-weight: 800; }
